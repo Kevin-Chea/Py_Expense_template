@@ -2,6 +2,7 @@ from PyInquirer import prompt
 import csv
 from user import select_user
 from generics import yes_no_question
+from debts import add_debts
 
 expense_questions = [
     {
@@ -45,6 +46,10 @@ def new_expense(*args):
             print("Error, this user is incorrect, cannot add expense")
             return False
         other_users.append(user)
+    
+    # Update the depts
+    if not add_debts(spender, other_users, infos["amount"]):
+        return False
     
     # List of the data to write
     dataToWrite = [infos["label"], infos["amount"], spender] + other_users
