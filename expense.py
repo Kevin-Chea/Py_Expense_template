@@ -1,5 +1,6 @@
 from PyInquirer import prompt
 import csv
+from user import select_user
 
 expense_questions = [
     {
@@ -12,18 +13,16 @@ expense_questions = [
         "name":"label",
         "message":"New Expense - Label: ",
     },
-    {
-        "type":"input",
-        "name":"spender",
-        "message":"New Expense - Spender: ",
-    },
-
 ]
 
 
 
 def new_expense(*args):
     infos = prompt(expense_questions)
+    user = select_user()
+    if (user == None):
+        print("Can't add expense")
+        return False
     # We read the file. If an expense with the same label exists, the new one is not registered.
     # Each line has a label, an amount and the spender (in this order)
     with open('expense_report.csv', 'r', newline='') as csvfile:
@@ -36,7 +35,7 @@ def new_expense(*args):
     with open('expense_report.csv', 'a', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([infos["label"], infos["amount"], infos["spender"]])
+        spamwriter.writerow([infos["label"], infos["amount"], user])
     
     # Writing the informations on external file might be a good idea ¯\_(ツ)_/¯
     print("Expense Added !")
