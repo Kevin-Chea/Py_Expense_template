@@ -40,3 +40,23 @@ def add_debts(spender, users, totalAmount):
             print("Error during debts update")
             return False
     return True
+
+def show_debts():
+    with open('debts.csv', 'r', newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        for row in spamreader:
+            user = row[0]
+            to = []
+            amounts = []
+            for i in range(1, len(row), 2):
+                if (row[i + 1] != '0'):
+                    to.append(row[i])
+                    amounts.append(row[i + 1])
+            if (len(to) > 0):
+                print(user + " owes:", end='')
+                for j in range(len(to)):
+                    print(amounts[j] + " to " + to[j] + "; ", end='')
+                print("")
+            else :
+                print("nothing")
+                
